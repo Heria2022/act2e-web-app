@@ -1,34 +1,56 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
-  </head>
-  <body>
-    <div class="jumbotron">
-      <h1 class="display-4">Hello, world!</h1>
-      <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-      <hr class="my-4">
-      <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-      <p class="lead">
-        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-      </p>
-    </div>
-
-    <div id="mydiv"></div>
-
-    <script type="text/babel">
-      function Hello() {
-        return <h1>Hello World!</h1>;
+<head>
+   <title>Firebase Image Upload using HTML and JavaScript</title>
+   <style>
+      #photo{
+         margin-top: 200px;
+         margin-left: 450px;
       }
+      #upload{
+         margin-top: 20px;
+         margin-left: 450px;
+      }
+   </style>
+</head>
+<body>
+   <input type="file" id="photo" /></br>
+   <button id="upload" onclick="uploadImage()">Upload Image</button>
+   <a id="mylink" download>Download</a>
+</body>
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+<script>
 
-      ReactDOM.render(<Hello />, document.getElementById('mydiv'))
-    </script>
+   const firebaseConfig = {
+    apiKey: "AIzaSyBTAItPyokxlGM1s1ArMbjH0HPTTe6RpQA",
+    authDomain: "doc-system.firebaseapp.com",
+    projectId: "doc-system",
+    storageBucket: "gs://doc-system.appspot.com",
+    messagingSenderId: "875680833494",
+    appId: "1:875680833494:web:65ca2b400fcfe88b3a4e77"
+  };
 
-  </body>
+   // Initialize Firebase
+   firebase.initializeApp(firebaseConfig);
+   console.log(firebase);
+   function uploadImage() {
+      const ref = firebase.storage().ref();
+      const file = document.querySelector("#photo").files[0];
+      const name = file.name;
+      const metadata = {
+         contentType: file.type
+      };
+      const task = ref.child(name).put(file, metadata);task
+      .then(snapshot => snapshot.ref.getDownloadURL())
+      .then(url => {
+      console.log(url);
+      alert('image uploaded successfully');
+      document.querySelector("#mylink").href = url;
+   })
+   .catch(console.error);
+   }
+   const errorMsgElement = document.querySelector('span#errorMsg');
+
+</script>
 </html>
